@@ -23,7 +23,7 @@ namespace SWETeam.Common.Mail
         ///     + Priority không để là high nếu không cần thiết (Spam is often marked with high priority, so your message will be treated with more scrutiny)
         ///     + IsBodyHTML nếu là true, thì phải dùng template html
         /// </summary>
-        public static async Task<bool> SendMailAsync(IServiceProvider provider, MailParameter parameter)
+        public static async Task<bool> SendMailAsync(MailParameter parameter)
         {
             // Validate
             ValidateMailResult validateMailResult = ValidateMail(parameter);
@@ -45,7 +45,7 @@ namespace SWETeam.Common.Mail
             var currentIndex = 0;
             if (source == null)
             {
-                source = provider.GetRequiredService<IMongoService<SourceMail>>().GetAll();
+                source = _provider.GetRequiredService<IMongoService<SourceMail>>().GetAll();
                 MemoryCacheHelper.Set(cacheKey, source, 24 * 60);
             }
 
