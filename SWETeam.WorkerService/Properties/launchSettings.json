@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "SWETeam.WorkerService": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

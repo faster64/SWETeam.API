@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SWETeam.BusinessLayer\SWETeam.BusinessLayer.csproj" />
+    <ProjectReference Include="..\SWETeam.Common\SWETeam.Common.csproj" />
+    <ProjectReference Include="..\SWETeam.Entity\SWETeam.Entity.csproj" />
+  </ItemGroup>
+
+
+</Project>

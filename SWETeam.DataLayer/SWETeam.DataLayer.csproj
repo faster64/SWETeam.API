@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SWETeam.Common\SWETeam.Common.csproj" />
+    <ProjectReference Include="..\SWETeam.Entity\SWETeam.Entity.csproj" />
+  </ItemGroup>
+
+</Project>
