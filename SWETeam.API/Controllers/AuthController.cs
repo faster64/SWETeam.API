@@ -14,18 +14,28 @@ namespace SWETeam.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        #region Declares
         private readonly IServiceProvider _provider;
         private readonly IHttpContextAccessor _accessor;
+
+        #endregion
+
+        #region Constructors
         public AuthController(IServiceProvider provider)
         {
             _provider = provider;
             _accessor = provider.GetRequiredService<IHttpContextAccessor>();
         }
+        #endregion
 
+        #region Controllers
+        /// <summary>
+        /// Check live token
+        /// </summary>
         [HttpGet("ping")]
         public IActionResult Ping([FromQuery] string uid)
         {
-            return Ok("Success");
+            return Ok("pong");
         }
 
         /// <summary>
@@ -241,5 +251,6 @@ namespace SWETeam.Controllers
 
             return Ok(result);
         }
+        #endregion
     }
 }
