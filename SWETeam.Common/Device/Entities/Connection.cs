@@ -14,11 +14,11 @@ namespace SWETeam.Common.Device
 
         public string IP { get; set; }
 
-        public string OS { get; set; }
-
         public string Browser { get; set; }
 
         public string Device { get; set; }
+
+        public string OS { get; set; }
 
         public string OSDescription { get; set; }
 

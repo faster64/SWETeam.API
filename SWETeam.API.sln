@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWETeam.Common", "SWETeam.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWETeam.WorkerService", "SWETeam.WorkerService\SWETeam.WorkerService.csproj", "{5E203E65-2507-4D6B-97B9-4B83C8DD1CF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWETeam.ElasticSearch", "SWETeam.ElasticSearch\SWETeam.ElasticSearch.csproj", "{146A3391-B30F-4A02-97DE-EE68E1EA92D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWETeam.ElasticSearch", "SWETeam.ElasticSearch\SWETeam.ElasticSearch.csproj", "{146A3391-B30F-4A02-97DE-EE68E1EA92D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestMode", "ConsoleTestMode\ConsoleTestMode.csproj", "{B4E8D82A-878C-402E-8D9A-DBD4B3379B0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{146A3391-B30F-4A02-97DE-EE68E1EA92D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{146A3391-B30F-4A02-97DE-EE68E1EA92D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{146A3391-B30F-4A02-97DE-EE68E1EA92D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4E8D82A-878C-402E-8D9A-DBD4B3379B0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4E8D82A-878C-402E-8D9A-DBD4B3379B0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4E8D82A-878C-402E-8D9A-DBD4B3379B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4E8D82A-878C-402E-8D9A-DBD4B3379B0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

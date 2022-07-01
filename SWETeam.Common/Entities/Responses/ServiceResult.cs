@@ -33,6 +33,7 @@ namespace SWETeam.Common.Entities
         public void SetError(Exception ex, string moreInfo = "")
         {
             Success = false;
+            ErrorMessage = ex.Message;
 
             // Ghi đè error code nếu là unauthorized
             if (_code == HttpStatusCode.Unauthorized)
@@ -40,26 +41,18 @@ namespace SWETeam.Common.Entities
                 _code = HttpStatusCode.Unauthorized;
             }
 
-            // Nếu là môi trường dev thì cho phép show error
-            if (Constant.IsDevelopmentENV)
+            if (true || !Constant.IsDevelopmentENV)
             {
-                ErrorMessage = ex.Message;
-            }
-            else
-            {
-                ErrorMessage = Constant.HAS_ERROR_MESSAGE;
                 CommonLog.LogError(ex, moreInfo);
             }
         }
 
         /// <summary>
         /// Hàm xử lý khi không có quyền
-        /// CreatedBy: nvcuong2 (02/05/2022)
         /// </summary>
-        /// <param name="customMsg"></param>
         public void HandleAuthorization(string customMsg = "")
         {
-            _success = false;
+            Success = false;
             HasPermission = false;
 
             if (!string.IsNullOrEmpty(customMsg))

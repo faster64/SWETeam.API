@@ -4,6 +4,7 @@ using Microsoft.Net.Http.Headers;
 using SWETeam.Common.Caching;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace SWETeam.Common.Filters
@@ -27,7 +28,7 @@ namespace SWETeam.Common.Filters
                 {
                     context.Result = new ContentResult()
                     {
-                        StatusCode = 401,
+                        StatusCode = (int)HttpStatusCode.Unauthorized,
                         ContentType = "application/json"
                     };
                     return;

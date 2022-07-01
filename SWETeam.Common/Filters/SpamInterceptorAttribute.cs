@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using SWETeam.Common.Caching;
 using SWETeam.Common.Properties;
 using System;
+using System.Net;
 
 namespace SWETeam.Common.Filters
 {
@@ -11,6 +12,8 @@ namespace SWETeam.Common.Filters
         private readonly int _maxRequest;
         private readonly int _spamTime;
         private readonly double _blockTime;
+        private string blockedKey = "{0}_{1}_blocked";
+        private string requestCountKey = "{0}_{1}_request_count";
         public string path;
         public string ip;
 
@@ -44,7 +47,7 @@ namespace SWETeam.Common.Filters
 
                 context.Result = new ContentResult()
                 {
-                    StatusCode = 400,
+                    StatusCode = (int)HttpStatusCode.BadRequest,
                     Content = string.Format(Resources.SpamRemainderMessage, ip, minutes, seconds - (minutes * 60)),
                     ContentType = "application/json"
                 };
@@ -67,7 +70,7 @@ namespace SWETeam.Common.Filters
                 BlockedIP();
                 context.Result = new ContentResult()
                 {
-                    StatusCode = 400,
+                    StatusCode = (int)HttpStatusCode.BadRequest,
                     Content = String.Format(Resources.SpamMessage, ip, _blockTime),
                     ContentType = "application/json"
                 };
@@ -77,7 +80,7 @@ namespace SWETeam.Common.Filters
 
         private DateTime? GetBlockedTime()
         {
-            var cache = MemoryCacheHelper.Get($"{path}_{ip}_blocked");
+            var cache = MemoryCacheHelper.Get(string.Format(blockedKey, path, ip));
             if (cache == null)
             {
                 return null;
@@ -98,7 +101,7 @@ namespace SWETeam.Common.Filters
         /// </summary>
         private object GetRequestCount()
         {
-            return MemoryCacheHelper.Get($"{path}_{ip}_request_count");
+            return MemoryCacheHelper.Get(string.Format(requestCountKey, path, ip));
         }
 
         /// <summary>
@@ -106,7 +109,7 @@ namespace SWETeam.Common.Filters
         /// </summary>
         private void SetRequestCount(int count)
         {
-            MemoryCacheHelper.Set($"{path}_{ip}_request_count", count, (1.0 * _spamTime) / _maxRequest);
+            MemoryCacheHelper.Set(string.Format(requestCountKey, path, ip), count, (1.0 * _spamTime) / _maxRequest);
         }
 
         /// <summary>
@@ -114,8 +117,8 @@ namespace SWETeam.Common.Filters
         /// </summary>
         private void BlockedIP()
         {
-            MemoryCacheHelper.Set($"{path}_{ip}_blocked", DateTime.Now, _blockTime);
-            MemoryCacheHelper.Remove($"{path}_{ip}_request_count");
+            MemoryCacheHelper.Set(string.Format(blockedKey, path, ip), DateTime.Now, _blockTime);
+            MemoryCacheHelper.Remove(string.Format(requestCountKey, path, ip));
         }
 
     }

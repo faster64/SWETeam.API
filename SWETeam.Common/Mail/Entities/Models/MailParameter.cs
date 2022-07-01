@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text;
+using System.Web;
 
 namespace SWETeam.Common.Mail
 {
@@ -21,7 +22,7 @@ namespace SWETeam.Common.Mail
         {
             get
             {
-                return _config.GetSection("MailSettings:SourceDefault").Value;
+                return _config.GetSection("mail_settings:source_default").Value;
             }
         }
 
@@ -50,7 +51,7 @@ namespace SWETeam.Common.Mail
             {
                 if (string.IsNullOrEmpty(_displayName))
                 {
-                    return _config.GetSection("MailSettings:DisplayName").Value;
+                    return _config.GetSection("mail_settings:display_name").Value;
                 }
                 return _displayName;
             }
@@ -68,6 +69,12 @@ namespace SWETeam.Common.Mail
         /// <summary>
         /// Có sử dụng HTML không?
         /// </summary>
-        public bool IsBodyHTML { get; set; } = true;
+        public bool IsBodyHTML
+        {
+            get
+            {
+                return Body == HttpUtility.HtmlEncode(Body);
+            }
+        }
     }
 }

@@ -595,7 +595,7 @@ namespace SWETeam.Common.Auth
                 string otpTask = newOtp;
                 string subject = string.Empty;
                 string body = string.Empty;
-                string clientUrl = _config.GetSection("ClientUrl").Value;
+                string clientUrl = _config.GetSection("client_url").Value;
 
                 // template reset password
                 if (sendMailConfig.OtpType == OtpType.Password)
@@ -668,7 +668,7 @@ namespace SWETeam.Common.Auth
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var claims = new List<Claim>();
-            var secretKey = Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]);
+            var secretKey = Encoding.UTF8.GetBytes(_config["jwt_settings:key"]);
             var symmetricSecurityKey = new SymmetricSecurityKey(secretKey);
             var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
 
@@ -680,8 +680,8 @@ namespace SWETeam.Common.Auth
             claims.Add(new Claim("CreatedAt", DateTime.Now.ToString()));
 
             var accessToken = new JwtSecurityToken(
-                    issuer: _config["JwtSettings:Issuer"],
-                    audience: _config["JwtSettings:Issuer"],
+                    issuer: _config["jwt_settings:issuer"],
+                    audience: _config["jwt_settings:issuer"],
                     claims: claims,
                     expires: DateTime.Now.AddSeconds(AuthConstant.TOKEN_TIME),
                     signingCredentials: credentials

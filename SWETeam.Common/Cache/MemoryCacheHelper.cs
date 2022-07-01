@@ -28,7 +28,7 @@ namespace SWETeam.Common.Caching
         /// <summary>
         /// Mặc định cache trong 1d
         /// </summary>
-        public static double defaultCacheTime = 60 * 24;
+        public static double defaultCacheTime = 24 * 60;
         #endregion
 
         #region Methods
@@ -48,15 +48,11 @@ namespace SWETeam.Common.Caching
         /// <param name="cacheTime">Thời gian cache (minutes)</param>
         public static void Set(string key, object value, double? cacheTime = default)
         {
-            if (cacheTime == null)
+            if (cacheTime == null || cacheTime.Value <= 0)
             {
-                memoryCache.Set(key, value, TimeSpan.FromMinutes(defaultCacheTime));
+                cacheTime = defaultCacheTime;
             }
-            else
-            {
-                memoryCache.Set(key, value, TimeSpan.FromMinutes(cacheTime.Value));
-            }
-
+            memoryCache.Set(key, value, TimeSpan.FromMinutes(cacheTime.Value));
         }
 
         /// <summary>

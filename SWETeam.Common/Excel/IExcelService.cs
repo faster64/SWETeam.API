@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SWETeam.Common.Excel
 {
-    public interface IExcelHandler
+    public interface IExcelService
     {
     }
 }

@@ -35,20 +35,11 @@ namespace SWETeam.Common.Auth
         /// </summary>
         public void SetError(Exception ex, string moreInfo = "")
         {
-            this.Success = false;
-            if (_code == HttpStatusCode.OK)
-            {
-                _code = HttpStatusCode.InternalServerError;
-            }
+            Success = false;
+            ErrorMessage = ex.Message;
 
-            // Nếu là môi trường dev thì cho phép show error
-            if (Constant.IsDevelopmentENV)
+            if (true || !Constant.IsDevelopmentENV)
             {
-                ErrorMessage = ex.Message;
-            }
-            else
-            {
-                ErrorMessage = Constant.HAS_ERROR_MESSAGE;
                 CommonLog.LogError(ex, moreInfo);
             }
         }

@@ -23,7 +23,7 @@ namespace SWETeam.Common.Mail
         ///     + Priority không để là high nếu không cần thiết (Spam is often marked with high priority, so your message will be treated with more scrutiny)
         ///     + IsBodyHTML nếu là true, thì phải dùng template html
         /// </summary>
-        public static async Task<bool> SendMailAsync(MailParameter parameter)
+        public static async Task<bool> SendMailAsync(MailParameter parameter, Action<bool> callback = null)
         {
             // Validate
             ValidateMailResult validateMailResult = ValidateMail(parameter);
@@ -37,10 +37,17 @@ namespace SWETeam.Common.Mail
 
             // Execute
             bool success = await Execute(client, message);
-            if (success) return true;
+            if (success)
+            {
+                if (callback != null)
+                {
+                    callback.Invoke(true);
+                }
+                return true;
+            }
 
             #region  Cơ chế retry nếu xảy ra lỗi, thì sử dụng source mail khác để gửi lại
-            var cacheKey = _config.GetSection("CacheManager:Keys:SourceMail").Value;
+            var cacheKey = _config.GetSection("cache_manager:email:keys:source_mail").Value;
             var source = MemoryCacheHelper.Get(cacheKey);
             var currentIndex = 0;
             if (source == null)
@@ -53,7 +60,13 @@ namespace SWETeam.Common.Mail
             while (!success)
             {
                 if (currentIndex >= sourceDeserialized.Count)
+                {
+                    if (callback != null)
+                    {
+                        callback.Invoke(false);
+                    }
                     return false;
+                }
 
                 var option = sourceDeserialized[currentIndex++];
                 client.Credentials = new NetworkCredential(option.Mail, option.AppPassword);
@@ -80,12 +93,12 @@ namespace SWETeam.Common.Mail
 
             client = new SmtpClient()
             {
-                Host = _config.GetSection("MailSettings:Host").Value,
-                Port = Int32.Parse(_config.GetSection("MailSettings:Port").Value),
+                Host = _config.GetSection("mail_settings:host").Value,
+                Port = Int32.Parse(_config.GetSection("mail_settings:port").Value),
                 UseDefaultCredentials = true,
                 EnableSsl = true
             };
-            client.Credentials = new NetworkCredential(param.From, _config.GetSection("MailSettings:AppPassword").Value);
+            client.Credentials = new NetworkCredential(param.From, _config.GetSection("mail_settings:app_password").Value);
         }
 
         /// <summary>

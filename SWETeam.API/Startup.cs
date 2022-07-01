@@ -55,11 +55,11 @@ namespace SWETeam.API
                 jwtOptions.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
-                    ValidAudience = Configuration["JwtSettings:Issuer"],
+                    ValidAudience = Configuration["jwt_settings:issuer"],
                     ValidateIssuer = true,
-                    ValidIssuer = Configuration["JwtSettings:Issuer"],
+                    ValidIssuer = Configuration["jwt_settings:issuer"],
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSettings:Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwt_settings:key"])),
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
@@ -168,11 +168,12 @@ namespace SWETeam.API
             {
                 var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
                 var exception = exceptionHandlerPathFeature.Error;
+                var responseContent = new ServiceResult();
 
-                var result = JsonConvert.SerializeObject(new ServiceResult() { ErrorMessage = exception.Message, Success = false });
+                responseContent.SetError(exception);
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-                await context.Response.WriteAsync(result);
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(responseContent));
             }));
 
             app.UseEndpoints(endpoints =>

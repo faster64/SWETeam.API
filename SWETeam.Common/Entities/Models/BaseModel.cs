@@ -34,16 +34,12 @@ namespace SWETeam.Common.Entities
         /// Đã xóa bản ghi hay chưa?
         /// </summary>
         public bool IsDeleted { get; set; }
-
         #endregion
 
         #region Indexer
-
         /// <summary>
         /// Indexer get value hoặc set value với propertyName
-        /// CreatedBy: nvcuong2 (01/05/2022)
         /// </summary>
-        [JsonIgnore]
         [Ignore]
         public object this[string propertyName]
         {
@@ -51,9 +47,7 @@ namespace SWETeam.Common.Entities
             {
                 PropertyInfo prop = this.GetType().GetProperty(propertyName);
                 if (prop == null)
-                {
                     throw new Exception(string.Format("Property {0} does not exists in {1}", propertyName, this.GetType().Name));
-                }
                 return prop.GetValue(this);
             }
 
@@ -61,13 +55,10 @@ namespace SWETeam.Common.Entities
             {
                 PropertyInfo prop = this.GetType().GetProperty(propertyName);
                 if (prop == null)
-                {
                     throw new Exception(string.Format("Property {0} does not exists in {1}", propertyName, this.GetType().Name));
-                }
                 prop.SetValue(this, value);
             }
         }
-
         #endregion
 
         #region Sql Command

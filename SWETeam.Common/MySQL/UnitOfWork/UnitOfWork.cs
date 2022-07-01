@@ -25,7 +25,7 @@ namespace SWETeam.Common.MySQL
         {
             _provier = provider;
             _config = provider.GetRequiredService<IConfiguration>();
-            _connectionString = _config.GetConnectionString("LocalMySql");
+            _connectionString = _config.GetSection("mysql:local_mysql").Value;
             _MySqlConnection = new MySqlConnection(_connectionString);
             _MySqlConnection.Open();
         }

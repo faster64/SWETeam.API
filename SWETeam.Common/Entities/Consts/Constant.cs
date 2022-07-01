@@ -7,13 +7,10 @@ namespace SWETeam.Common.Entities
     public static class Constant
     {
         #region Env
-
-        public const bool IsDevelopmentENV = true;
-
+        public const bool IsDevelopmentENV = false;
         #endregion
 
         #region Messages
-
         /// <summary>
         /// Msg đã xảy ra lỗi
         /// </summary>
@@ -38,7 +35,6 @@ namespace SWETeam.Common.Entities
         /// Msg not permission
         /// </summary>
         public const string NOT_PERMISSION_MESSAGE = "Not permission!";
-
         #endregion
     }
 

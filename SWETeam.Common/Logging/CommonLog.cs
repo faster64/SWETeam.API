@@ -9,7 +9,7 @@ namespace SWETeam.Common.Logging
     public static class CommonLog
     {
         private static IServiceProvider _provider;
-        private static string projectName = "OApi";
+        private static string projectName = "SWETeam.API";
         private static string basePath = $"D:";
         private static int currentErrorLogNo = 1;
 

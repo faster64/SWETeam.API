@@ -59,7 +59,7 @@ namespace SWETeam.Common.Device
             }
             catch (Exception)
             {
-                return new { ErrorMessage = "Get information of the device has been failed!" };
+                return new { ErrorMessage = "Có lỗi xảy ra khi lấy thông tin thiết bị" };
             }
         }
 

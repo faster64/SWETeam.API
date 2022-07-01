@@ -9,6 +9,7 @@ namespace SWETeam.Common.Entities
     {
         protected HttpStatusCode _code = HttpStatusCode.OK;
         protected bool _success = true;
+        protected string _errorMessage;
 
         /// <summary>
         /// Http status code trả về
@@ -53,7 +54,19 @@ namespace SWETeam.Common.Entities
         /// <summary>
         /// Error message
         /// </summary>
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage
+        {
+            get
+            {
+                if (!Constant.IsDevelopmentENV)
+                    return Constant.HAS_ERROR_MESSAGE;
+                return _errorMessage;
+            }
+            set
+            {
+                _errorMessage = value;
+            }
+        }
 
         /// <summary>
         /// Time hệ thống

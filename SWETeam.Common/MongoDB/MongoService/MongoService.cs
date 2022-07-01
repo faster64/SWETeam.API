@@ -58,8 +58,8 @@ namespace SWETeam.Common.MongoDB
         {
             _provider = provider;
             _config = provider.GetRequiredService<IConfiguration>();
-            _connectionString = _config.GetConnectionString("Cluster");
-            _databaseName = _config.GetSection("Database:Mongo").Value;
+            _connectionString = _config.GetSection("mongo:cluster").Value;
+            _databaseName = _config.GetSection("mongo:database").Value;
         }
         #endregion
 
