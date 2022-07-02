@@ -16,4 +16,5 @@ Heroku
     - MongoDB, MySQL
     - Log
     - Excel
+    - Elastic Search
     - Worker Service
