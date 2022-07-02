@@ -13,6 +13,8 @@
     <ProjectReference Include="..\SWETeam.BusinessLayer\SWETeam.BusinessLayer.csproj" />
     <ProjectReference Include="..\SWETeam.Common\SWETeam.Common.csproj" />
     <ProjectReference Include="..\SWETeam.Entity\SWETeam.Entity.csproj" />
+    <ProjectReference Include="..\SWETeam.Kafka\SWETeam.Kafka.csproj" />
+    <ProjectReference Include="..\SWETeam.RabbitMQ\SWETeam.RabbitMQ.csproj" />
   </ItemGroup>
 
 

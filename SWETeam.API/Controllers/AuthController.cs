@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using SWETeam.Common.Auth;
 using SWETeam.Common.Entities;
 using SWETeam.Common.Libraries;
 using System;
+using System.Text;
 
 namespace SWETeam.Controllers
 {

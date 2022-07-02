@@ -81,6 +81,14 @@ namespace SWETeam.API
             });
             #endregion
 
+            #region Distributed Cache Redis
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = "localhost";
+                options.InstanceName = "swe_team";
+            });
+            #endregion
+
             #region AutoMapper
             services.AddAutoMapper(typeof(Startup));
             #endregion
