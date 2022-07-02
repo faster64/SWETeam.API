@@ -18,3 +18,5 @@ Heroku
     - Excel
     - Elastic Search
     - Worker Service
+    - Kafka
+    - RabbitMQ
