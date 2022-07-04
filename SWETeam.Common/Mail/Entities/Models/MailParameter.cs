@@ -73,7 +73,7 @@ namespace SWETeam.Common.Mail
         {
             get
             {
-                return Body == HttpUtility.HtmlEncode(Body);
+                return Body != HttpUtility.HtmlEncode(Body);
             }
         }
     }

@@ -18,7 +18,7 @@ using static SWETeam.Common.Entities.Enumeration;
 
 namespace SWETeam.Common.Auth
 {
-    public  class AuthService : IAuthService
+    public class AuthService : IAuthService
     {
         #region Declare
         private readonly IServiceProvider _provider;
@@ -618,15 +618,14 @@ namespace SWETeam.Common.Auth
                     body = String.Format(AuthConstant.CONTENT_TWO_FACTOR_AUTHENTICATION, sendMailConfig.User.FullName.ToUpper(), otpTask, $"{clientUrl}/auth/login-register/{mailEncode}");
                 }
 
-                new Task(() =>
-                {
-                    MailParameter parameter = new MailParameter(_config);
-                    parameter.To = sendMailConfig.User.Email;
-                    parameter.Subject = subject;
-                    parameter.Body = body;
-                    EmailHelper.SendMailAsync(parameter).Wait();
-                }).Start();
 
+                MailParameter parameter = new MailParameter(_config);
+                parameter.To = sendMailConfig.User.Email;
+                parameter.Subject = subject;
+                parameter.Body = body;
+
+                EmailHelper.InjectProvider(_provider);
+                EmailHelper.SendMailAsync(parameter).Wait();
                 _unitOfWork.Commit();
             }
             else

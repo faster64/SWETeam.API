@@ -32,6 +32,8 @@ namespace SWETeam.Common.Mail
                 throw new Exception(validateMailResult.ErrorMessage);
             }
 
+            InjectDependency();
+
             // GetConfig
             GetConfig(parameter, out MailMessage message, out SmtpClient client);
 
