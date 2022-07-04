@@ -33,7 +33,6 @@ namespace SWETeam.Common.Entities
         public void SetError(Exception ex, string moreInfo = "")
         {
             Success = false;
-            ErrorMessage = ex.Message;
 
             // Ghi đè error code nếu là unauthorized
             if (_code == HttpStatusCode.Unauthorized)
@@ -41,9 +40,13 @@ namespace SWETeam.Common.Entities
                 _code = HttpStatusCode.Unauthorized;
             }
 
-            if (true || !Constant.IsDevelopmentENV)
+            if (!Constant.IsDevelopmentENV)
             {
                 CommonLog.LogError(ex, moreInfo);
+            }
+            else
+            {
+                ErrorMessage = ex.Message;
             }
         }
 

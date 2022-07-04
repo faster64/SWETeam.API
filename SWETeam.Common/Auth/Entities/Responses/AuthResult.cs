@@ -36,11 +36,14 @@ namespace SWETeam.Common.Auth
         public void SetError(Exception ex, string moreInfo = "")
         {
             Success = false;
-            ErrorMessage = ex.Message;
 
-            if (true || !Constant.IsDevelopmentENV)
+            if (!Constant.IsDevelopmentENV)
             {
                 CommonLog.LogError(ex, moreInfo);
+            }
+            else
+            {
+                ErrorMessage = ex.Message;
             }
         }
     }

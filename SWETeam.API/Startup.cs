@@ -13,8 +13,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using SWETeam.Common.Auth;
 using SWETeam.Common.Entities;
 using SWETeam.Common.Filters;
+using SWETeam.Common.MongoDB;
+using SWETeam.Common.MySQL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -122,10 +125,14 @@ namespace SWETeam.API
             //services.AddScoped(typeof(IDLBase<>), typeof(DLBase<>));
 
             // Mongo
-            //services.TryAddSingleton(typeof(IMongoService<>), typeof(MongoService<>));
+            services.TryAddSingleton(typeof(IMongoService<>), typeof(MongoService<>));
+
+            // MySQL
+            services.TryAddSingleton<IUnitOfWork, UnitOfWork>();
+
 
             // Auth
-            //services.AddScoped<IAuthService, AuthServicez>();
+            services.AddScoped<IAuthService, AuthService>();
 
             // Device info
             //services.TryAddSingleton<IDeviceService, DeviceService>();

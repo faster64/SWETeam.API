@@ -58,8 +58,8 @@ namespace SWETeam.Common.Entities
         {
             get
             {
-                if (!Constant.IsDevelopmentENV)
-                    return Constant.HAS_ERROR_MESSAGE;
+                //if (_success == false && !Constant.IsDevelopmentENV)
+                //    return Constant.HAS_ERROR_MESSAGE;
                 return _errorMessage;
             }
             set
