@@ -24,27 +24,9 @@ namespace SWETeam.Common.Auth
         /// </summary>
         public string OTP { get; set; }
 
-
         /// <summary>
         /// Thông tin validate
         /// </summary>
         public List<ValidateField> ValidateInfo { get; set; } = new List<ValidateField>();
-
-        /// <summary>
-        /// Hàm set lỗi khi có exception
-        /// </summary>
-        public void SetError(Exception ex, string moreInfo = "")
-        {
-            Success = false;
-
-            if (!Constant.IsDevelopmentENV)
-            {
-                CommonLog.LogError(ex, moreInfo);
-            }
-            else
-            {
-                ErrorMessage = ex.Message;
-            }
-        }
     }
 }

@@ -75,7 +75,10 @@ namespace SWETeam.Common.Logging
         /// </summary>
         public static void InjectProvider(IServiceProvider provider)
         {
-            _provider = provider;
+            if (_provider == null)
+            {
+                _provider = provider;
+            }
         }
     }
 }

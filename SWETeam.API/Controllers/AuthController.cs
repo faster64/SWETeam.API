@@ -19,7 +19,6 @@ namespace SWETeam.Controllers
         #region Declares
         private readonly IServiceProvider _provider;
         private readonly IHttpContextAccessor _accessor;
-
         #endregion
 
         #region Constructors
@@ -47,16 +46,7 @@ namespace SWETeam.Controllers
         [HttpPost("register")]
         public IActionResult Register(User userInfo)
         {
-            AuthResult authResult = new AuthResult();
-            try
-            {
-                authResult = _provider.GetRequiredService<IAuthService>().Register(userInfo);
-            }
-            catch (Exception ex)
-            {
-                authResult.SetError(ex);
-            }
-
+            var authResult = _provider.GetRequiredService<IAuthService>().Register(userInfo);
             return Ok(authResult);
         }
 
@@ -67,16 +57,7 @@ namespace SWETeam.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginRequest loginRequest)
         {
-            AuthResult authResult = new AuthResult();
-            try
-            {
-                authResult = _provider.GetRequiredService<IAuthService>().Login(loginRequest);
-            }
-            catch (Exception ex)
-            {
-                authResult.SetError(ex);
-            }
-
+            var authResult = _provider.GetRequiredService<IAuthService>().Login(loginRequest);
             return Ok(authResult);
         }
 
@@ -86,16 +67,7 @@ namespace SWETeam.Controllers
         [HttpGet("logout")]
         public IActionResult Logout([FromQuery] string uid)
         {
-            AuthResult authResult = new AuthResult();
-            try
-            {
-                authResult = _provider.GetRequiredService<IAuthService>().Logout(uid);
-            }
-            catch (Exception ex)
-            {
-                authResult.SetError(ex);
-            }
-
+            var authResult = _provider.GetRequiredService<IAuthService>().Logout(uid);
             return Ok(authResult);
         }
 
@@ -105,16 +77,7 @@ namespace SWETeam.Controllers
         [HttpPost("change-password")]
         public IActionResult ChangePassword(ChangePasswordRequest model)
         {
-            AuthResult authResult = new AuthResult();
-            try
-            {
-                authResult = _provider.GetRequiredService<IAuthService>().ChangePassword(model);
-            }
-            catch (Exception ex)
-            {
-                authResult.SetError(ex);
-            }
-
+            var authResult = _provider.GetRequiredService<IAuthService>().ChangePassword(model);
             return Ok(authResult);
         }
 
@@ -125,16 +88,7 @@ namespace SWETeam.Controllers
         [HttpPost("change-password-otp")]
         public IActionResult ChangePasswordOTP(ChangePasswordRequest model)
         {
-            AuthResult authResult = new AuthResult();
-            try
-            {
-                authResult = _provider.GetRequiredService<IAuthService>().ChangePasswordOTP(model);
-            }
-            catch (Exception ex)
-            {
-                authResult.SetError(ex);
-            }
-
+            var authResult = _provider.GetRequiredService<IAuthService>().ChangePasswordOTP(model);
             return Ok(authResult);
         }
 
@@ -147,21 +101,11 @@ namespace SWETeam.Controllers
         [HttpGet("reset-password")]
         public IActionResult ResetPassword([FromQuery] string poe)
         {
-            ResetPasswordResult result = new ResetPasswordResult();
-            try
+            var result = _provider.GetRequiredService<IAuthService>().ResetPassword(poe?.ToBase64Decode());
+            if (result.Success)
             {
-                result = _provider.GetRequiredService<IAuthService>().ResetPassword(poe?.ToBase64Decode());
-                if (result.Success)
-                {
-                    result.Message = AuthConstant.SEND_OTP_SUCCESS_MESSAGE;
-                }
+                result.Message = AuthConstant.SEND_OTP_SUCCESS_MESSAGE;
             }
-            catch (Exception ex)
-            {
-                result.Success = false;
-                result.ErrorMessage = ex.Message;
-            }
-
             return Ok(result);
         }
 
@@ -173,16 +117,8 @@ namespace SWETeam.Controllers
         [HttpGet("provide-new-otp")]
         public IActionResult ProvideNewOtp([FromQuery] string u, [FromQuery] int type)
         {
-            AuthResult authResult = new AuthResult();
-            try
-            {
-                _provider.GetRequiredService<IAuthService>().ProvideNewOtp(u, type).Downcast(out authResult);
-            }
-            catch (Exception ex)
-            {
-                authResult.SetError(ex);
-            }
-
+            var authResult = new AuthResult();
+            _provider.GetRequiredService<IAuthService>().ProvideNewOtp(u, type).Downcast(out authResult);
             return Ok(authResult);
         }
 
@@ -193,23 +129,7 @@ namespace SWETeam.Controllers
         [HttpPost("verify-account")]
         public IActionResult VerifyAccount(VerifyRequest verify)
         {
-            VerifyOtpResult result = new VerifyOtpResult();
-            try
-            {
-                result = _provider.GetRequiredService<IAuthService>().VerifyAccount(verify);
-            }
-            catch (Exception ex)
-            {
-                if (Constant.IsDevelopmentENV)
-                {
-                    result.ErrorMessage = ex.Message;
-                }
-                else
-                {
-                    result.ErrorMessage = Constant.HAS_ERROR_MESSAGE;
-                }
-            }
-
+            var result = _provider.GetRequiredService<IAuthService>().VerifyAccount(verify);
             return Ok(result);
         }
 
@@ -220,16 +140,7 @@ namespace SWETeam.Controllers
         [HttpPost("refresh-token")]
         public IActionResult RefreshToken(RefreshTokenRequest refresh)
         {
-            AuthResult result = new AuthResult();
-            try
-            {
-                result = _provider.GetRequiredService<IAuthService>().RefreshToken(refresh);
-            }
-            catch (Exception ex)
-            {
-                result.SetError(ex);
-            }
-
+            var result = _provider.GetRequiredService<IAuthService>().RefreshToken(refresh);
             return Ok(result);
         }
 
@@ -241,16 +152,7 @@ namespace SWETeam.Controllers
         [HttpGet("check-has-user")]
         public IActionResult CheckHasUser([FromQuery] string u)
         {
-            bool result = false;
-            try
-            {
-                result = _provider.GetRequiredService<IAuthService>().GetUserByPhoneOrEmail(u?.ToBase64Decode()) != null;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
+            bool result = _provider.GetRequiredService<IAuthService>().GetUserByPhoneOrEmail(u?.ToBase64Decode()) != null;
             return Ok(result);
         }
         #endregion

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SWETeam.Common.Logging;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
@@ -76,6 +77,23 @@ namespace SWETeam.Common.Entities
             get
             {
                 return DateTime.Now;
+            }
+        }
+
+
+        /// <summary>
+        /// Hàm set lỗi khi có exception
+        /// </summary>
+        public virtual void SetError(Exception ex, string moreInfo = "")
+        {
+            Success = false;
+            if (!Constant.IsDevelopmentENV)
+            {
+                CommonLog.LogError(ex, moreInfo);
+            }
+            else
+            {
+                ErrorMessage = ex.Message;
             }
         }
     }

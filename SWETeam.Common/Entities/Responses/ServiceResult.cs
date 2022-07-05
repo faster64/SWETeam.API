@@ -30,7 +30,7 @@ namespace SWETeam.Common.Entities
         /// <summary>
         /// Hàm set lỗi khi có exception
         /// </summary>
-        public void SetError(Exception ex, string moreInfo = "")
+        public override void SetError(Exception ex, string moreInfo = "")
         {
             Success = false;
 

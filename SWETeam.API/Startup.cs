@@ -183,7 +183,7 @@ namespace SWETeam.API
             {
                 var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
                 var exception = exceptionHandlerPathFeature.Error;
-                var responseContent = new ServiceResult();
+                var responseContent = new BaseResponse();
 
                 responseContent.SetError(exception);
                 context.Response.ContentType = "application/json";

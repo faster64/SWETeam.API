@@ -172,7 +172,10 @@ namespace SWETeam.Common.Mail
         /// <param name="provider"></param>
         public static void InjectProvider(IServiceProvider provider)
         {
-            _provider = provider;
+            if (_provider == null)
+            {
+                _provider = provider;
+            }
             InjectDependency();
         }
 
