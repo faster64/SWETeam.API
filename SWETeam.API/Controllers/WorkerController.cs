@@ -4,6 +4,9 @@ using System;
 
 namespace SWETeam.API.Controllers
 {
+    /// <summary>
+    /// Worker service
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class WorkerController : ControllerBase
