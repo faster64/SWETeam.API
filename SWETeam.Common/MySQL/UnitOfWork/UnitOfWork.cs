@@ -13,31 +13,39 @@ namespace SWETeam.Common.MySQL
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
         #region Declare
-        private readonly MySqlConnection _MySqlConnection;
+        private readonly MySqlConnection _mySqlConnection;
         private readonly string _connectionString = "";
         private readonly IConfiguration _config;
-        private readonly IServiceProvider _provier;
+        private readonly IServiceProvider _provider;
         private MySqlTransaction _transaction;
         #endregion
 
         #region Constructor
         public UnitOfWork(IServiceProvider provider)
         {
-            _provier = provider;
-            _config = provider.GetRequiredService<IConfiguration>();
+            _provider = provider;
+            _config = _provider.GetRequiredService<IConfiguration>();
             _connectionString = _config.GetSection("mysql:trial_mysql").Value;
-            _MySqlConnection = new MySqlConnection(_connectionString);
-            _MySqlConnection.Open();
+            _mySqlConnection = new MySqlConnection(_connectionString);
+            OpenConnection();
         }
         #endregion
 
         #region Implementation
         /// <summary>
+        /// Open connection
+        /// </summary>
+        public void OpenConnection()
+        {
+            _mySqlConnection.Open();
+        }
+
+        /// <summary>
         /// Get MySqlConnection
         /// </summary>
         public MySqlConnection GetConnection()
         {
-            return _MySqlConnection;
+            return _mySqlConnection;
         }
 
         /// <summary>
@@ -53,7 +61,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public void BeginTransaction()
         {
-            _transaction = _MySqlConnection.BeginTransaction();
+            _transaction = _mySqlConnection.BeginTransaction();
         }
 
         /// <summary>
@@ -83,7 +91,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public IEnumerable<T> Query<T>(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.Query<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.Query<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
         }
 
         /// <summary>
@@ -91,7 +99,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public Task<IEnumerable<T>> QueryAsync<T>(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.QueryAsync<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.QueryAsync<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
         }
 
         /// <summary>
@@ -99,7 +107,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public T QueryFirstOrDefault<T>(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.QueryFirstOrDefault<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.QueryFirstOrDefault<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
         }
 
         /// <summary>
@@ -107,7 +115,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public Task<T> QueryFirstOrDefaultAsync<T>(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.QueryFirstOrDefaultAsync<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.QueryFirstOrDefaultAsync<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
         }
 
         /// <summary>
@@ -115,7 +123,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public T QuerySingleOrDefault<T>(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.QuerySingleOrDefault<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.QuerySingleOrDefault<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
         }
 
         /// <summary>
@@ -123,7 +131,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public Task<T> QuerySingleOrDefaultAsync<T>(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.QuerySingleOrDefaultAsync<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.QuerySingleOrDefaultAsync<T>(sql, param, commandTimeout: commandTimeout, commandType: commandType);
         }
 
         /// <summary>
@@ -131,7 +139,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public dynamic Query(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.Query(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.Query(sql, param, commandTimeout: commandTimeout, commandType: commandType);
         }
 
         /// <summary>
@@ -139,7 +147,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public Task<IEnumerable<dynamic>> QueryAsync(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.QueryAsync(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.QueryAsync(sql, param, commandTimeout: commandTimeout, commandType: commandType);
 
         }
 
@@ -148,7 +156,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public dynamic QueryFirstOrDefault(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.QueryFirstOrDefault(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.QueryFirstOrDefault(sql, param, commandTimeout: commandTimeout, commandType: commandType);
 
         }
 
@@ -157,7 +165,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public Task<dynamic> QueryFirstOrDefaultAsync(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.QueryFirstOrDefaultAsync(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.QueryFirstOrDefaultAsync(sql, param, commandTimeout: commandTimeout, commandType: commandType);
 
         }
 
@@ -166,7 +174,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public dynamic QuerySingleOrDefault(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.QuerySingleOrDefault(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.QuerySingleOrDefault(sql, param, commandTimeout: commandTimeout, commandType: commandType);
 
         }
 
@@ -175,7 +183,7 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public Task<dynamic> QuerySingleOrDefaultAsync(string sql, object param, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
-            return _MySqlConnection.QuerySingleOrDefaultAsync(sql, param, commandTimeout: commandTimeout, commandType: commandType);
+            return _mySqlConnection.QuerySingleOrDefaultAsync(sql, param, commandTimeout: commandTimeout, commandType: commandType);
 
         }
 
@@ -186,7 +194,7 @@ namespace SWETeam.Common.MySQL
         public int Execute(string sql, object param = null, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
             BeginTransaction();
-            return _MySqlConnection.Execute(sql, param, _transaction, commandTimeout, commandType);
+            return _mySqlConnection.Execute(sql, param, _transaction, commandTimeout, commandType);
         }
 
         /// <summary>
@@ -196,7 +204,7 @@ namespace SWETeam.Common.MySQL
         public int ExecuteAutoCommit(string sql, object param = null, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
             BeginTransaction();
-            int result = _MySqlConnection.Execute(sql, param, _transaction, commandTimeout, commandType);
+            int result = _mySqlConnection.Execute(sql, param, _transaction, commandTimeout, commandType);
             if (result > 0)
             {
                 _transaction.Commit();
@@ -216,7 +224,7 @@ namespace SWETeam.Common.MySQL
         public Task<int> ExecuteAsync(string sql, object param = null, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
             BeginTransaction();
-            return _MySqlConnection.ExecuteAsync(sql, param, _transaction, commandTimeout, commandType);
+            return _mySqlConnection.ExecuteAsync(sql, param, _transaction, commandTimeout, commandType);
         }
 
         /// <summary>
@@ -226,7 +234,7 @@ namespace SWETeam.Common.MySQL
         public object ExecuteScalar(string sql, object param = null, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
             BeginTransaction();
-            return _MySqlConnection.ExecuteScalar(sql, param, _transaction, commandTimeout, commandType);
+            return _mySqlConnection.ExecuteScalar(sql, param, _transaction, commandTimeout, commandType);
         }
 
         /// <summary>
@@ -236,7 +244,7 @@ namespace SWETeam.Common.MySQL
         public Task<object> ExecuteScalarAsync(string sql, object param = null, int? commandTimeout = null, CommandType? commandType = CommandType.Text)
         {
             BeginTransaction();
-            return _MySqlConnection.ExecuteScalarAsync(sql, param, _transaction, commandTimeout, commandType);
+            return _mySqlConnection.ExecuteScalarAsync(sql, param, _transaction, commandTimeout, commandType);
         }
         #endregion
 
@@ -246,9 +254,9 @@ namespace SWETeam.Common.MySQL
         /// </summary>
         public void Dispose()
         {
-            if (_MySqlConnection.State == ConnectionState.Open)
+            if (_mySqlConnection.State == ConnectionState.Open)
             {
-                _MySqlConnection.Close();
+                _mySqlConnection.Close();
             }
         }
         #endregion

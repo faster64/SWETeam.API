@@ -10,6 +10,11 @@ namespace SWETeam.Common.MySQL
     public interface IUnitOfWork
     {
         /// <summary>
+        /// Open connection
+        /// </summary>
+        void OpenConnection();
+
+        /// <summary>
         /// Get MySqlConnection
         /// </summary>
         MySqlConnection GetConnection();

@@ -84,7 +84,6 @@ namespace SWETeam.Common.Entities
             }
         }
 
-
         /// <summary>
         /// Hàm set lỗi khi có exception
         /// </summary>
