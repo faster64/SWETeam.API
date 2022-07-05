@@ -25,6 +25,10 @@ namespace SWETeam.Common.Entities
             set
             {
                 _code = value;
+                if (!_code.ToString().StartsWith("2") && _success)
+                {
+                    _success = false;
+                }
             }
         }
 
@@ -89,6 +93,7 @@ namespace SWETeam.Common.Entities
             Success = false;
             if (!Constant.IsDevelopmentENV)
             {
+                ErrorMessage = Constant.HAS_ERROR_MESSAGE;
                 CommonLog.LogError(ex, moreInfo);
             }
             else

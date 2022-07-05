@@ -24,7 +24,7 @@ namespace SWETeam.Common.Filters
 
         public void OnResultExecuting(ResultExecutingContext context)
         {
-            context.HttpContext.Response.Headers.Add("author", _provider.GetRequiredService<IConfiguration>().GetSection("Organization").Value);
+            context.HttpContext.Response.Headers.Add("author", _provider.GetRequiredService<IConfiguration>().GetSection("organization").Value);
         }
     }
 }
