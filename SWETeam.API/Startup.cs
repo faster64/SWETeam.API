@@ -15,12 +15,14 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using SWETeam.Common.Auth;
 using SWETeam.Common.Entities;
+using SWETeam.Common.Exceptions;
 using SWETeam.Common.Filters;
 using SWETeam.Common.MongoDB;
 using SWETeam.Common.MySQL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -185,7 +187,16 @@ namespace SWETeam.API
                 var exception = exceptionHandlerPathFeature.Error;
                 var responseContent = new BaseResponse();
 
-                responseContent.SetError(exception);
+                if (exception is PermissionException)
+                {
+                    responseContent.Code = HttpStatusCode.Forbidden;
+                    responseContent.HasPermission = false;
+                    responseContent.ErrorMessage = exception.Message;
+                }
+                else
+                {
+                    responseContent.SetError(exception);
+                }
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                 await context.Response.WriteAsync(JsonConvert.SerializeObject(responseContent));

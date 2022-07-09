@@ -7,10 +7,10 @@ using System.Web;
 
 namespace SWETeam.Common.Mail
 {
-    public class MailParameter
+    public class EmailSetting
     {
         private IConfiguration _config;
-        public MailParameter(IConfiguration config)
+        public EmailSetting(IConfiguration config)
         {
             _config = config;
         }
@@ -18,7 +18,7 @@ namespace SWETeam.Common.Mail
         /// <summary>
         /// Mail address người gửi
         /// </summary>
-        public string From
+        public string Sender
         {
             get
             {

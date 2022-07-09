@@ -244,7 +244,7 @@ namespace SWETeam.Common.Auth
             }
 
             // Gửi mail cảnh báo đã đổi mật khẩu
-            MailParameter config = new MailParameter(_config);
+            EmailSetting config = new EmailSetting(_config);
             config.To = model.UserName;
             config.Subject = AuthConstant.TITLE_CHANGE_PASSWORD;
             config.Body = string.Format(AuthConstant.CONTENT_CHANGE_PASSWORD, user.FullName);
@@ -619,13 +619,13 @@ namespace SWETeam.Common.Auth
                 }
 
 
-                MailParameter parameter = new MailParameter(_config);
-                parameter.To = sendMailConfig.User.Email;
-                parameter.Subject = subject;
-                parameter.Body = body;
+                EmailSetting setting = new EmailSetting(_config);
+                setting.To = sendMailConfig.User.Email;
+                setting.Subject = subject;
+                setting.Body = body;
 
                 EmailHelper.InjectProvider(_provider);
-                EmailHelper.SendMailAsync(parameter).Wait();
+                EmailHelper.SendMailAsync(setting).Wait();
                 _unitOfWork.Commit();
             }
             else

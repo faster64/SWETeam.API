@@ -10,7 +10,7 @@ namespace SWETeam.Common.Mail
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
+        public string Id { get; set; }
 
         public string Mail { get; set; }
 

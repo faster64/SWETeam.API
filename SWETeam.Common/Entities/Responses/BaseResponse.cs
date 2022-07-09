@@ -1,4 +1,5 @@
-﻿using SWETeam.Common.Logging;
+﻿using SWETeam.Common.Exceptions;
+using SWETeam.Common.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -74,6 +75,11 @@ namespace SWETeam.Common.Entities
         }
 
         /// <summary>
+        /// Có quyền hay không
+        /// </summary>
+        public bool HasPermission { get; set; } = true;
+
+        /// <summary>
         /// Time hệ thống
         /// </summary>
         public DateTime ServerTime
@@ -90,14 +96,15 @@ namespace SWETeam.Common.Entities
         public virtual void SetError(Exception ex, string moreInfo = "")
         {
             Success = false;
-            if (!Constant.IsDevelopmentENV)
+
+            if (ex is CaughtableException)
             {
-                ErrorMessage = Constant.HAS_ERROR_MESSAGE;
-                CommonLog.LogError(ex, moreInfo);
+                ErrorMessage = ex.Message;
             }
             else
             {
-                ErrorMessage = ex.Message;
+                ErrorMessage = Constant.HAS_ERROR_MESSAGE;
+                CommonLog.LogError(ex, moreInfo);
             }
         }
     }

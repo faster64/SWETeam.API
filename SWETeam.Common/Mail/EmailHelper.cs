@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SWETeam.Common.Caching;
+using SWETeam.Common.Exceptions;
 using SWETeam.Common.MongoDB;
 using System;
 using System.Collections.Generic;
@@ -23,19 +24,15 @@ namespace SWETeam.Common.Mail
         ///     + Priority không để là high nếu không cần thiết (Spam is often marked with high priority, so your message will be treated with more scrutiny)
         ///     + IsBodyHTML nếu là true, thì phải dùng template html
         /// </summary>
-        public static async Task<bool> SendMailAsync(MailParameter parameter, Action<bool> callback = null)
+        public static async Task<bool> SendMailAsync(EmailSetting setting, Action<bool> callback = null)
         {
             // Validate
-            ValidateMailResult validateMailResult = ValidateMail(parameter);
-            if (!validateMailResult.IsValid)
-            {
-                throw new Exception(validateMailResult.ErrorMessage);
-            }
+            ValidateMail(setting);
 
             InjectDependency();
 
             // GetConfig
-            GetConfig(parameter, out MailMessage message, out SmtpClient client);
+            GetConfig(setting, out MailMessage message, out SmtpClient client);
 
             // Execute
             bool success = await Execute(client, message);
@@ -81,17 +78,17 @@ namespace SWETeam.Common.Mail
         /// <summary>
         /// Get config
         /// </summary>
-        private static void GetConfig(MailParameter param, out MailMessage message, out SmtpClient client)
+        private static void GetConfig(EmailSetting setting, out MailMessage message, out SmtpClient client)
         {
-            message = new MailMessage(from: param.From, to: param.To);
-            message.From = new MailAddress(param.From, param.DisplayName);
-            message.Subject = param.Subject;
+            message = new MailMessage(from: setting.Sender, to: setting.To);
+            message.From = new MailAddress(setting.Sender, setting.DisplayName);
+            message.Subject = setting.Subject;
             message.SubjectEncoding = Encoding.UTF8;
-            message.Body = param.Body;
+            message.Body = setting.Body;
             message.BodyEncoding = Encoding.UTF8;
-            message.IsBodyHtml = param.IsBodyHTML;
-            message.Priority = param.Priority;
-            message.ReplyToList.Add(new MailAddress(param.From));
+            message.IsBodyHtml = setting.IsBodyHTML;
+            message.Priority = setting.Priority;
+            message.ReplyToList.Add(new MailAddress(setting.Sender));
 
             client = new SmtpClient()
             {
@@ -100,54 +97,37 @@ namespace SWETeam.Common.Mail
                 UseDefaultCredentials = true,
                 EnableSsl = true
             };
-            client.Credentials = new NetworkCredential(param.From, _config.GetSection("mail_settings:app_password").Value);
+            client.Credentials = new NetworkCredential(setting.Sender, _config.GetSection("mail_settings:app_password").Value);
         }
 
         /// <summary>
         /// Validate mail
         /// </summary>
-        private static ValidateMailResult ValidateMail(MailParameter parameter)
+        private static ValidateMailResult ValidateMail(EmailSetting setting)
         {
-            ValidateMailResult result = new ValidateMailResult();
-            if (parameter == null)
-            {
-                result.ErrorCode = MailErrorCode.ParameterNull;
-                result.ErrorMessage = MailConstant.MAIL_PARAM_NULL;
-            }
-            else if (string.IsNullOrWhiteSpace(parameter.To))
-            {
-                result.FieldError = "To";
-                result.ErrorMessage = MailConstant.TO_MAIL_EMPTY_ERROR;
-            }
-            else if (string.IsNullOrEmpty(parameter.Subject))
-            {
-                result.FieldError = "Subject";
-                result.ErrorMessage = MailConstant.SUBJECT_EMPTY_ERROR;
-            }
-            else if (string.IsNullOrEmpty(parameter.Body))
-            {
-                result.FieldError = "Body";
-                result.ErrorMessage = MailConstant.BODY_EMPTY_ERROR;
-            }
-            else if (!string.IsNullOrWhiteSpace(parameter.To))
-            {
+            if (setting == null)
+                throw new CaughtableException(MailConstant.MAIL_PARAM_NULL);
+
+            else if (string.IsNullOrWhiteSpace(setting.To))
+                throw new CaughtableException(MailConstant.TO_MAIL_EMPTY_ERROR);
+
+            else if (string.IsNullOrEmpty(setting.Subject))
+                throw new CaughtableException(MailConstant.SUBJECT_EMPTY_ERROR);
+
+            else if (string.IsNullOrEmpty(setting.Body))
+                throw new CaughtableException(MailConstant.BODY_EMPTY_ERROR);
+
+            else if (!string.IsNullOrWhiteSpace(setting.To))
                 try
                 {
-                    new MailAddress(parameter.To);
+                    new MailAddress(setting.To);
                 }
                 catch (FormatException)
                 {
-                    result.FieldError = "To";
-                    result.ErrorMessage = MailConstant.TO_MAIL_INVALID_ERROR;
+                    throw new CaughtableException(MailConstant.TO_MAIL_INVALID_ERROR);
                 }
-            }
 
-            if (!string.IsNullOrEmpty(result.ErrorMessage))
-            {
-                result.ErrorCode = MailErrorCode.Required;
-            }
-
-            return result;
+            return new ValidateMailResult(); ;
         }
 
         /// <summary>
